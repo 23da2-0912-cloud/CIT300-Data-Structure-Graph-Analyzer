@@ -111,8 +111,18 @@ public class Main {
             System.out.println("\n--- GRAPH OPERATIONS (undirected) ---\n1. Add vertex\n2. Add edge\n3. Display graph\n4. BFS traversal\n5. DFS traversal\n6. Back");
             int c = readInt("Choice: ");
             if (c == 1) { String v = readText("Vertex label: "); graph.addVertex(v); System.out.println("Vertex added (or already existed)."); }
-            else if (c == 2) { String a = readText("First vertex: "); String b = readText("Second vertex: "); graph.addEdge(a,b); System.out.println("Edge added. Vertices are created if needed."); }
-            else if (c == 3) System.out.println(graph.display());
+else if (c == 2) {
+    String a = readText("First vertex: ");
+    String b = readText("Second vertex: ");
+
+    if (a.isBlank() || b.isBlank()) {
+        System.out.println("Vertex labels cannot be empty.");
+    } else if (graph.addEdge(a, b)) {
+        System.out.println("Edge added. Vertices are created if needed.");
+    } else {
+        System.out.println("Edge already exists.");
+    }
+}            else if (c == 3) System.out.println(graph.display());
             else if (c == 4 || c == 5) { String start = readText("Start vertex: "); List<String> order = c == 4 ? graph.bfs(start) : graph.dfs(start); String msg = (c == 4 ? "BFS" : "DFS") + " from " + start + ": " + (order.isEmpty() ? "vertex not found" : order); record(msg); System.out.println(msg); }
             else if (c == 6) return; else System.out.println("Invalid choice.");
         }
@@ -158,8 +168,19 @@ public class Main {
     private static class Graph {
         private final Map<String, LinkedHashSet<String>> adjacency = new LinkedHashMap<>();
         void addVertex(String v) { if (!v.isBlank()) adjacency.putIfAbsent(v, new LinkedHashSet<>()); }
-        void addEdge(String a, String b) { if (a.isBlank() || b.isBlank()) { System.out.println("Vertex labels cannot be empty."); return; } addVertex(a); addVertex(b); adjacency.get(a).add(b); adjacency.get(b).add(a); }
-        String display() { if (adjacency.isEmpty()) return "Graph is empty."; StringBuilder s = new StringBuilder(); for (String v : adjacency.keySet()) s.append(v).append(" -> ").append(adjacency.get(v)).append(System.lineSeparator()); return s.toString(); }
+boolean addEdge(String a, String b) {
+    if (a.isBlank() || b.isBlank()) {
+        return false;
+    }
+
+    addVertex(a);
+    addVertex(b);
+
+    boolean added = adjacency.get(a).add(b);
+    adjacency.get(b).add(a);
+
+    return added;
+}        String display() { if (adjacency.isEmpty()) return "Graph is empty."; StringBuilder s = new StringBuilder(); for (String v : adjacency.keySet()) s.append(v).append(" -> ").append(adjacency.get(v)).append(System.lineSeparator()); return s.toString(); }
         List<String> bfs(String start) { if (!adjacency.containsKey(start)) return Collections.emptyList(); List<String> order = new ArrayList<>(); Set<String> visited = new LinkedHashSet<>(); Queue<String> q = new ArrayDeque<>(); q.offer(start); visited.add(start); while (!q.isEmpty()) { String v = q.poll(); order.add(v); for (String next : adjacency.get(v)) if (visited.add(next)) q.offer(next); } return order; }
         List<String> dfs(String start) { if (!adjacency.containsKey(start)) return Collections.emptyList(); List<String> order = new ArrayList<>(); Set<String> visited = new LinkedHashSet<>(); dfsVisit(start, visited, order); return order; }
         private void dfsVisit(String v, Set<String> visited, List<String> order) { visited.add(v); order.add(v); for (String next : adjacency.get(v)) if (!visited.contains(next)) dfsVisit(next, visited, order); }

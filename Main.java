@@ -167,7 +167,14 @@ else if (c == 2) {
     }
     private static class Graph {
         private final Map<String, LinkedHashSet<String>> adjacency = new LinkedHashMap<>();
-        void addVertex(String v) { if (!v.isBlank()) adjacency.putIfAbsent(v, new LinkedHashSet<>()); }
+
+void addVertex(String v) {
+    if (v == null || v.isBlank()) {
+        return;
+    }
+
+    adjacency.putIfAbsent(v, new LinkedHashSet<>());
+}
 boolean addEdge(String a, String b) {
     if (a.isBlank() || b.isBlank()) {
         return false;

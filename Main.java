@@ -86,6 +86,11 @@ public class Main {
     private static void searchingMenu() {
         while (true) {
             System.out.println("\n--- SEARCHING ---\nCurrent array: " + arrayData + "\n1. Linear Search\n2. Binary Search (sorts a copy)\n3. Back");
+            
+            if (arrayData.isEmpty()) {
+            System.out.println("The array is empty. Insert values before searching.");
+            }
+  
             int c = readInt("Choice: ");
             if (c == 1 || c == 2) {
                 int target = readInt("Value to find: ");

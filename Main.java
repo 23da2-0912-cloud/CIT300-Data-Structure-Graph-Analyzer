@@ -158,8 +158,15 @@ else if (c == 2) {
         void push(int v) { values.add(v); }
         Integer pop() { return values.isEmpty() ? null : values.remove(values.size()-1); }
         Integer peek() { return values.isEmpty() ? null : values.get(values.size()-1); }
-        String display() { ArrayList<Integer> copy = new ArrayList<>(values); Collections.reverse(copy); return copy.toString(); }
+String display() {
+    if (values.isEmpty()) {
+        return "Empty stack";
     }
+
+    ArrayList<Integer> copy = new ArrayList<>(values);
+    Collections.reverse(copy);
+    return copy.toString();
+}    }
     private static class ArrayQueue {
         private final Queue<Integer> values = new ArrayDeque<>();
         void enqueue(int v) { values.offer(v); }

@@ -46,8 +46,13 @@ public class Main {
             if (c == 1) { int v = readInt("Value to insert: "); arrayData.add(v); System.out.println("Inserted."); }
             else if (c == 2) { int v = readInt("Value to delete: "); if (arrayData.remove(Integer.valueOf(v))) System.out.println("Deleted."); else System.out.println("Value not found."); }
             else if (c == 3) { int v = readInt("Value to search: "); int idx = arrayData.indexOf(v); record("Array search for " + v + ": " + (idx >= 0 ? "found at index " + idx : "not found")); System.out.println(results.get(results.size()-1)); }
-            else if (c == 4) System.out.println("Array values: " + arrayData);
-            else if (c == 5) return; else System.out.println("Invalid choice.");
+else if (c == 4) {
+    if (arrayData.isEmpty()) {
+        System.out.println("Array is empty.");
+    } else {
+        System.out.println("Array values: " + arrayData);
+    }
+}            else if (c == 5) return; else System.out.println("Invalid choice.");
         }
     }
     private static void stackMenu() {
